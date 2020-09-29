@@ -13,6 +13,7 @@ import kotlinx.coroutines.runBlocking
 import mozilla.components.browser.state.action.EngineAction
 import mozilla.components.browser.state.action.WebExtensionAction
 import mozilla.components.browser.state.state.BrowserState
+import mozilla.components.browser.state.state.EngineState
 import mozilla.components.browser.state.state.WebExtensionState
 import mozilla.components.browser.state.state.createTab
 import mozilla.components.browser.state.store.BrowserStore
@@ -259,18 +260,18 @@ class AddonManagerTest {
 
     @Test
     fun `updateAddon - when a extension is updated successfully`() {
+        val engine: Engine = mock()
+        val engineSession: EngineSession = mock()
         val store = spy(
             BrowserStore(
                 BrowserState(
                     tabs = listOf(
-                        createTab(id = "1", url = "https://www.mozilla.org")
+                        createTab(id = "1", url = "https://www.mozilla.org", engineState = EngineState(engineSession))
                     ),
                     extensions = mapOf("extensionId" to mock())
                 )
             )
         )
-        val engine: Engine = mock()
-        val engineSession: EngineSession = mock()
         val onSuccessCaptor = argumentCaptor<((WebExtension?) -> Unit)>()
         var updateStatus: Status? = null
         val manager = AddonManager(store, engine, mock(), mock())
@@ -280,7 +281,6 @@ class AddonManagerTest {
         whenever(updatedExt.url).thenReturn("url")
         whenever(updatedExt.supportActions).thenReturn(true)
 
-        store.dispatch(EngineAction.LinkEngineSessionAction("1", engineSession)).joinBlocking()
         WebExtensionSupport.installedExtensions["extensionId"] = mock()
 
         val oldExt = WebExtensionSupport.installedExtensions["extensionId"]
@@ -302,7 +302,7 @@ class AddonManagerTest {
         assertEquals(updatedExt, WebExtensionSupport.installedExtensions["extensionId"])
 
         // Verifying we updated the extension in the store
-        verify(store, times(2)).dispatch(actionCaptor.capture())
+        verify(store).dispatch(actionCaptor.capture())
         assertEquals(
             WebExtensionState(updatedExt.id, updatedExt.url, updatedExt.getMetadata()?.name, updatedExt.isEnabled()),
             actionCaptor.allValues.last().updatedExtension
