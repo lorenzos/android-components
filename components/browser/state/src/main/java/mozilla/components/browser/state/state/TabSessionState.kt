@@ -68,7 +68,8 @@ fun createTab(
     thumbnail: Bitmap? = null,
     contextId: String? = null,
     lastAccess: Long = 0L,
-    source: SessionState.Source = SessionState.Source.NONE
+    source: SessionState.Source = SessionState.Source.NONE,
+    engineState: EngineState = EngineState()
 ): TabSessionState {
     return TabSessionState(
         id = id,
@@ -83,6 +84,7 @@ fun createTab(
         readerState = readerState,
         contextId = contextId,
         lastAccess = lastAccess,
-        source = source
+        source = source,
+        engineState = engineState
     )
 }
