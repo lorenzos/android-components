@@ -23,6 +23,7 @@ import mozilla.components.lib.state.MiddlewareContext
 import mozilla.components.support.test.argumentCaptor
 import mozilla.components.support.test.eq
 import mozilla.components.support.test.ext.joinBlocking
+import mozilla.components.support.test.libstate.ext.waitUntilIdle
 import mozilla.components.support.test.mock
 import mozilla.components.support.test.robolectric.testContext
 import mozilla.components.support.test.whenever
@@ -82,6 +83,7 @@ class RecentlyClosedMiddlewareTest {
             store.dispatch(RecentlyClosedAction.AddClosedTabsAction(listOf(closedTab)))
                 .joinBlocking()
 
+            store.waitUntilIdle()
             dispatcher.advanceUntilIdle()
 
             verify(middleware.recentlyClosedTabsStorage).addTabsToCollectionWithMax(
@@ -109,6 +111,7 @@ class RecentlyClosedMiddlewareTest {
 
             store.dispatch(TabListAction.RemoveTabAction("1234")).joinBlocking()
 
+            store.waitUntilIdle()
             dispatcher.advanceUntilIdle()
 
             val closedTabCaptor = argumentCaptor<List<ClosedTab>>()
@@ -145,6 +148,7 @@ class RecentlyClosedMiddlewareTest {
 
             store.dispatch(TabListAction.RemoveTabAction("1234")).joinBlocking()
 
+            store.waitUntilIdle()
             dispatcher.advanceUntilIdle()
 
             verifyNoMoreInteractions(middleware.recentlyClosedTabsStorage)
@@ -171,6 +175,7 @@ class RecentlyClosedMiddlewareTest {
 
             store.dispatch(TabListAction.RemoveAllNormalTabsAction).joinBlocking()
 
+            store.waitUntilIdle()
             dispatcher.advanceUntilIdle()
 
             val closedTabCaptor = argumentCaptor<List<ClosedTab>>()
@@ -208,6 +213,7 @@ class RecentlyClosedMiddlewareTest {
 
             store.dispatch(TabListAction.RemoveAllTabsAction).joinBlocking()
 
+            store.waitUntilIdle()
             dispatcher.advanceUntilIdle()
 
             val closedTabCaptor = argumentCaptor<List<ClosedTab>>()
@@ -245,6 +251,7 @@ class RecentlyClosedMiddlewareTest {
 
             store.dispatch(RecentlyClosedAction.InitializeRecentlyClosedState).joinBlocking()
 
+            store.waitUntilIdle()
             dispatcher.advanceUntilIdle()
 
             verify(storage).getTabs()
@@ -270,6 +277,7 @@ class RecentlyClosedMiddlewareTest {
             store.dispatch(RecentlyClosedAction.RemoveClosedTabAction(closedTab))
                 .joinBlocking()
 
+            store.waitUntilIdle()
             verify(storage).removeTab(closedTab)
         }
 
@@ -291,6 +299,7 @@ class RecentlyClosedMiddlewareTest {
 
             store.dispatch(RecentlyClosedAction.RemoveAllClosedTabAction).joinBlocking()
 
+            store.waitUntilIdle()
             verify(storage).removeAllTabs()
         }
 }
