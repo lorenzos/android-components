@@ -270,7 +270,7 @@ class SessionUseCasesTest {
         val store = spy(BrowserStore(
             BrowserState(
                 tabs = listOf(
-                    createTab(url ="https://wwww.mozilla.org", id = "tab1", engineState = EngineState(crashed = true))
+                    createTab(url = "https://wwww.mozilla.org", id = "tab1", engineState = EngineState(crashed = true))
                 ),
                 customTabs = listOf(
                     createCustomTab("https://wwww.mozilla.org", id = "customTab1",

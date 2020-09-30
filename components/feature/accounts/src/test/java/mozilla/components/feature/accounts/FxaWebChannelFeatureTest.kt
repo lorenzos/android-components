@@ -6,9 +6,8 @@ package mozilla.components.feature.accounts
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.runBlocking
-import mozilla.components.browser.state.action.EngineAction
-import mozilla.components.browser.state.action.TabListAction
 import mozilla.components.browser.state.state.BrowserState
+import mozilla.components.browser.state.state.EngineState
 import mozilla.components.browser.state.state.createTab
 import mozilla.components.browser.state.store.BrowserStore
 import mozilla.components.concept.engine.Engine
@@ -26,7 +25,6 @@ import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.test.any
 import mozilla.components.support.test.argumentCaptor
 import mozilla.components.support.test.eq
-import mozilla.components.support.test.ext.joinBlocking
 import mozilla.components.support.test.mock
 import mozilla.components.support.test.robolectric.testContext
 import mozilla.components.support.test.whenever
@@ -91,10 +89,10 @@ class FxaWebChannelFeatureTest {
         val serverConfig: ServerConfig = mock()
         val controller: WebExtensionController = mock()
 
-        val tab = createTab("https://www.mozilla.org", id = "test-tab")
-        val store = spy(BrowserStore(initialState = BrowserState(tabs = listOf(tab))))
-        store.dispatch(EngineAction.LinkEngineSessionAction(tab.id, engineSession)).joinBlocking()
-        store.dispatch(TabListAction.SelectTabAction(tab.id)).joinBlocking()
+        val tab = createTab("https://www.mozilla.org", id = "test-tab", engineState = EngineState(engineSession))
+        val store = spy(
+            BrowserStore(initialState = BrowserState(tabs = listOf(tab), selectedTabId = tab.id))
+        )
 
         val webchannelFeature = FxaWebChannelFeature(testContext, null, engine, store, accountManager, serverConfig)
         webchannelFeature.extensionController = controller
@@ -703,10 +701,14 @@ class FxaWebChannelFeatureTest {
         val serverConfig: ServerConfig = mock()
         WebExtensionController.installedExtensions[FxaWebChannelFeature.WEB_CHANNEL_EXTENSION_ID] = ext
 
-        val tab = createTab("https://www.mozilla.org", id = "test-tab")
-        val store = spy(BrowserStore(initialState = BrowserState(tabs = listOf(tab))))
-        store.dispatch(EngineAction.LinkEngineSessionAction(tab.id, engineSession)).joinBlocking()
-        store.dispatch(TabListAction.SelectTabAction(tab.id)).joinBlocking()
+        val tab = createTab(
+            url = "https://www.mozilla.org",
+            id = "test-tab",
+            engineState = EngineState(engineSession)
+        )
+        val store = spy(BrowserStore(
+            initialState = BrowserState(tabs = listOf(tab), selectedTabId = tab.id))
+        )
 
         whenever(accountManager.supportedSyncEngines()).thenReturn(expectedEngines)
         whenever(port.engineSession).thenReturn(engineSession)

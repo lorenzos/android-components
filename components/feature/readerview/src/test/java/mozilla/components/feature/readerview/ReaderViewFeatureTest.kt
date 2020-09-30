@@ -98,7 +98,7 @@ class ReaderViewFeatureTest {
         val engine: Engine = mock()
         val engineSession: EngineSession = mock()
         val tab = createTab(
-            url ="https://www.mozilla.org",
+            url = "https://www.mozilla.org",
             id = "test-tab",
             readerState = ReaderState(active = true),
             engineState = EngineState(engineSession)
@@ -132,7 +132,7 @@ class ReaderViewFeatureTest {
         val engineSession: EngineSession = mock()
         val controller: WebExtensionController = mock()
         val tab = createTab(
-            url ="https://www.mozilla.org",
+            url = "https://www.mozilla.org",
             id = "test-tab",
             engineState = EngineState(engineSession)
         )
@@ -286,7 +286,7 @@ class ReaderViewFeatureTest {
         val engine: Engine = mock()
         val engineSession: EngineSession = mock()
         val tab = createTab(
-            url ="https://www.mozilla.org",
+            url = "https://www.mozilla.org",
             id = "test-tab",
             engineState = EngineState(engineSession)
         )
@@ -335,7 +335,7 @@ class ReaderViewFeatureTest {
     fun `hide reader view updates state`() {
         val engine: Engine = mock()
         val tab = createTab(
-            url ="https://www.mozilla.org",
+            url = "https://www.mozilla.org",
             id = "test-tab",
             readerState = ReaderState(active = true)
         )
@@ -461,7 +461,7 @@ class ReaderViewFeatureTest {
         val ext: WebExtension = mock()
         val controller: WebExtensionController = mock()
         val tab = createTab(
-            url ="https://www.mozilla.org",
+            url = "https://www.mozilla.org",
             id = "test-tab",
             engineState = EngineState(engineSession)
         )
@@ -509,7 +509,7 @@ class ReaderViewFeatureTest {
         val ext: WebExtension = mock()
         val controller: WebExtensionController = mock()
         val tab = createTab(
-            url ="https://www.mozilla.org",
+            url = "https://www.mozilla.org",
             id = "test-tab",
             engineState = EngineState(engineSession)
         )
