@@ -52,12 +52,14 @@ fun createCustomTab(
     url: String,
     id: String = UUID.randomUUID().toString(),
     config: CustomTabConfig = CustomTabConfig(),
-    contextId: String? = null
+    contextId: String? = null,
+    engineState: EngineState = EngineState()
 ): CustomTabSessionState {
     return CustomTabSessionState(
         id = id,
         content = ContentState(url),
         config = config,
-        contextId = contextId
+        contextId = contextId,
+        engineState = engineState
     )
 }
